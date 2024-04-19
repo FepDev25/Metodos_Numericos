@@ -2,17 +2,17 @@ from biseccion import *
 from falsa_pocision import *
 import sympy as sp
 
-""" Determine las raíces reales de f(x) = −25182x − 90x2 + 44x3– 8x4 + 0.7x5:
-a) Gráficamente
-b) Usando el método de bisección para localizar la raíz más grande con es = 10%. Utilice como valores iniciales xl = 0.5 y xu = 1.0.
-c) Realice el mismo cálculo que en b), pero con el método de la falsa posición y es = 0.2% """
+"""Encuentre la raíz positiva de f(x) = x4 – 8x3 – 35x2 + 450x –1001, utilizando el método de la 
+falsa posición. Tome como valores iniciales a xl = 4.5 y xu = 6, y ejecute cinco iteraciones. 
+Calcule los errores tanto aproximado como verdadero, con base en el hecho de que la raíz es 5.60979. 
+Emplee una gráfica para explicar sus resultados y hacer el cálculo dentro de un es = 1.0%. """
 
-xi = 0.5
-xu = 1
+xi = 4.5
+xu = 6
 x = sp.Symbol('x')
-funcion = -25182*x - 90*x**2 + 44*x**3 - 8*x**4 + 0.7*x**5
-raiz = biseccion(xi , xu, 'x', funcion, 100, 10)
-graficar('x', funcion, -1, 2, raiz)
+funcion = x**4 - 8*x**3 -35*x**2 + 450*x - 1001 
+#raiz = biseccion(xi , xu, 'x', funcion, 100, 10)
+#graficar('x', funcion, 14, 18, raiz)
 
-raiz = falsa_pocision(xi, xu, 'x', funcion, 100, 0.2)
-graficar('x', funcion, -1, 2, raiz)
+raiz = falsa_pocision(xi, xu, 'x', funcion, 5, 0)
+graficar('x', funcion, 1, 10, raiz)
