@@ -119,4 +119,4 @@ print(f"La profundidad del tanque es: {raiz} m")
 comprobacion(raiz)
 
 # Graficar el punto de la raíz obtenida
-graficar('h', funcion, hi, hu, raiz)
+graficar('h', funcion, -10, 10, raiz)

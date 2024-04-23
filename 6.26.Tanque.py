@@ -1,5 +1,8 @@
 import sympy as sp
+import numpy as np
+import matplotlib.pyplot as plt
 import math
+
 
 """
 Suponga el lector que está diseñando un tanque esférico (véase la figura P6.26) de almacenamiento de agua 
@@ -39,7 +42,41 @@ def newton_raphson(funcion_h, limite_iteraciones, h_inicial):
         print()
     return h_n
 
+def graficar(simbolo, mi_funcion, rango_h1, rango_h2, raiz):
+    h = sp.Symbol(simbolo)
+    funcion = mi_funcion
+
+    funcion_numpy = sp.lambdify(h, funcion, 'numpy')
+
+    h_vals = np.linspace(rango_h1, rango_h2, 100)
+    f_vals = funcion_numpy(h_vals)
+
+    # Grafica la función
+    plt.plot(h_vals, f_vals, label=f'$f(h) = {str(funcion)}')
+    plt.xlabel('h')
+    plt.ylabel('f(h)')
+    plt.title('Gráfico de $f(h)$')
+    plt.scatter(raiz, 0, color='red')  # Punto de la raíz en el gráfico
+    plt.grid(True)
+    plt.legend()
+    plt.show()
+
+def comprobacion(valor_raiz):
+    h = sp.Symbol('h')
+    volumen_esperado = 30
+    funcion_inicial = (math.pi * h ** 2) * ((9 - h) / 3)
+    f_v = funcion_inicial.subs(h, valor_raiz)
+    print(f"Volumen esperado: {volumen_esperado}")
+    print(f"Volumen obtenido: {f_v}")
+
+
 h = sp.Symbol('h')
 funcion = (math.pi * h ** 2) * ((9 - h) / 3) - 30
 profundidad = newton_raphson(funcion, 3, 1)
 print(f"Profundidad: {profundidad} pies")
+
+# Comprobar resultado:
+comprobacion(profundidad)
+
+# Graficar el punto de la raíz obtenida
+graficar('h', funcion, -10, 10, profundidad)

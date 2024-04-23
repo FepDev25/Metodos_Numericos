@@ -2,11 +2,11 @@ import sympy as sp
 import numpy as np
 import matplotlib.pyplot as plt
 
-def biseccion(xi, xu, simbolo, mi_funcion, max_pasadas, porcentaje_error):
+def biseccion(xi, xu, mi_funcion, max_pasadas, porcentaje_error):
     # Definir variables y crear la funcion
     xr = 0
     xr_ant = 0
-    x = sp.Symbol(simbolo)
+    x = sp.Symbol('x')
     funcion = mi_funcion
 
     pasadas = 1;
@@ -35,17 +35,6 @@ def biseccion(xi, xu, simbolo, mi_funcion, max_pasadas, porcentaje_error):
         fxi_x_fxr = fxi * fxr
         print(f"f(xi) * f(xr): {fxi_x_fxr}")
 
-        # Calcular el error aproximado y el error aproximado porcentual
-        error_aprox = xr - xr_ant
-        error_porcentual = (error_aprox / xr) * 100
-        print(f"Error aproximado porcentual: {abs(error_porcentual)}%")
-
-        # Si el error porcentual es menor al error establecido, termina
-        if (abs(error_porcentual) <= porcentaje_error):
-            print(f"Error de {porcentaje_error} alcanzado")
-            print(f"Raiz aproximada: {xr}")
-            return xr
-
         # Si fxi_x_fxr es menor a cero, xu pasa a ser xr
         if fxi_x_fxr < 0:
             xu = xr
@@ -56,6 +45,17 @@ def biseccion(xi, xu, simbolo, mi_funcion, max_pasadas, porcentaje_error):
         # Si fxi_x_fxr es cero, xr es la raiz y termina
             print(f"Raiz encontrada: {xr}")
             return xr
+
+        # Calcular el error aproximado y el error aproximado porcentual
+        error_aprox = xr - xr_ant
+        error_porcentual = (error_aprox / xr) * 100
+        print(f"Error aproximado porcentual: {abs(error_porcentual)}%")
+
+        # Si el error porcentual es menor al error establecido, termina
+        if (abs(error_porcentual) <= porcentaje_error):
+            print(f"Error de {porcentaje_error} alcanzado")
+            print(f"Raiz aproximada: {xr}")
+            return xr 
         
         pasadas += 1
         print()
@@ -81,6 +81,6 @@ def graficar (simbolo, mi_funcion, rango_x, rango_y, raiz):
 
 if __name__ == "__main__":
     x = sp.Symbol('x')
-    funcion = x**4 - 3*x**3 + 2*x**2 - 10
-    raiz = biseccion(-1.5 , -1, 'x', funcion, 100, 0.5)
-    graficar('x', funcion, -1.5, 0, raiz)
+    funcion = x**2 
+    raiz = biseccion(-10, 10, funcion, 100, 0.5)
+    graficar('x', funcion, -10, 10, raiz)

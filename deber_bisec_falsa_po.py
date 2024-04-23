@@ -1,5 +1,5 @@
-from biseccion import *
-from falsa_pocision import *
+from raiz.biseccion import *
+from raiz.falsa_pocision import *
 import sympy as sp
 
 """Encuentre la raíz positiva de f(x) = x4 – 8x3 – 35x2 + 450x –1001, utilizando el método de la 
