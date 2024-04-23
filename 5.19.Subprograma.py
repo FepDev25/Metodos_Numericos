@@ -2,85 +2,56 @@ import sympy as sp
 import numpy as np
 import matplotlib.pyplot as plt
 
-def biseccion(xi, xu, simbolo, mi_funcion, max_pasadas, porcentaje_error):
+def imprimir(iteracion, xi, xu, xr, fxi, fxr):
+    print(f"Iteracion N{iteracion}")
+    print(f"xi: {xi}")
+    print(f"xu: {xu}")
+    print(f"xr: {xr}")
+    print(f"f(xi): {fxi}")
+    print(f"f(xr): {fxr}")
+    print()
+
+def biseccion(xi, xu, mi_funcion, max_iteraciones):
     # Definir variables y crear la funcion
     xr = 0
-    xr_ant = 0
-    x = sp.Symbol(simbolo)
+    x = sp.Symbol('x')
     funcion = mi_funcion
+    evaluacion = 0
 
-    pasadas = 1;
-    while pasadas < max_pasadas:
-        # xr_ant guarda el antiguo valor de xr para calcular los errores
-        xr_ant = xr
-
-        print(f"Pasada N {pasadas}")
-        print(f"Xi: {xi}")
-        print(f"Xu: {xu}")
-
-        # Calcular l valor de xr
+    iteraciones = 1;
+    # Evaluar f(xi) antes de entrar en el bucle
+    fxi = funcion.subs(x, xi)
+    evaluacion += 1
+    while iteraciones <= max_iteraciones:
         xr = (xi + xu) / 2
-        print(f"Xr: {xr}")
-
-        # Calcular l valor de fxi, fxu, y fxr evaluados en la funcion
-        fxi = funcion.subs(x, xi)
-        fxu = funcion.subs(x, xu)
+        # Evaluar unicamente xr
         fxr = funcion.subs(x, xr)
+        evaluacion += 1
+        # Realizar el test de f(xi)*f(xr)
+        test = fxi * fxr
 
-        print(f"f(xi): {fxi}")
-        print(f"f(xu): {fxu}")
-        print(f"f(xr): {fxr}")
+        imprimir(iteraciones, xi, xu, xr, fxi, fxr)
 
-        # Calcular el valor de f(xi)*f(xr)
-        fxi_x_fxr = fxi * fxr
-        print(f"f(xi) * f(xr): {fxi_x_fxr}")
-
-        # Calcular el error aproximado y el error aproximado porcentual
-        error_aprox = xr - xr_ant
-        error_porcentual = (error_aprox / xr) * 100
-        print(f"Error aproximado porcentual: {abs(error_porcentual)}%")
-
-        # Si el error porcentual es menor al error establecido, termina
-        if (abs(error_porcentual) <= porcentaje_error):
-            print(f"Error de {porcentaje_error} alcanzado")
-            print(f"Raiz aproximada: {xr}")
-            return xr
-
-        # Si fxi_x_fxr es menor a cero, xu pasa a ser xr
-        if fxi_x_fxr < 0:
+        if test < 0:
             xu = xr
-        # Si fxi_x_fxr es mayor a cero, xi pasa a ser xr
-        elif fxi_x_fxr > 0:
+        elif test > 0:
             xi = xr
+            # Si test es menor a cero, f(xi) sera f(xr) en la sigueinte pasada, evitando asi evaluaciones innecesarias
+            fxi = fxr
+            evaluacion -= 1
         else:
-        # Si fxi_x_fxr es cero, xr es la raiz y termina
             print(f"Raiz encontrada: {xr}")
             return xr
         
-        pasadas += 1
-        print()
+        iteraciones += 1
+    print(f"Numero de iteraciones: {iteraciones}")
+    print(f"Numero de evaluaciones: {evaluacion}")
     return xr
 
-def graficar (simbolo, mi_funcion, rango_x, rango_y, raiz):
-    x = sp.Symbol(simbolo)
-    funcion = mi_funcion
-
-    funcion_numpy = sp.lambdify(x, funcion, 'numpy')
-
-    x_vals = np.linspace(rango_x, rango_y, 100)
-    y_vals = funcion_numpy(x_vals)
-
-    plt.plot(x_vals, y_vals, label=f'$f(x) = {str(funcion)}')
-    plt.xlabel('x')
-    plt.ylabel('f(x)')
-    plt.title('Gráfico de $f(x)$')
-    plt.scatter(raiz, 0, color='red')
-    plt.grid(True)
-    plt.legend()
-    plt.show()
-
-if __name__ == "__main__":
-    x = sp.Symbol('x')
-    funcion = x**4 - 3*x**3 + 2*x**2 - 10
-    raiz = biseccion(-1.5 , -1, 'x', funcion, 100, 0.5)
-    graficar('x', funcion, -1.5, 0, raiz)
+xi = 0.5
+xu = 2
+iteraciones = 100
+x = sp.Symbol('x')
+funcion = sp.log(x**2) - 0.7
+raiz = biseccion(xi , xu, funcion, iteraciones)
+print(f"Raiz aproximada: {raiz}")
