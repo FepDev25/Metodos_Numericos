@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def biseccion(xi, xu, mi_funcion, max_pasadas, porcentaje_error):
-    # Definir variables y crear la funcion
+    # Definir variables y asociar la funcion del metodo con la que se pasa por parametro.
     xr = 0
     xr_ant = 0
     x = sp.Symbol('x')
@@ -14,19 +14,21 @@ def biseccion(xi, xu, mi_funcion, max_pasadas, porcentaje_error):
         # xr_ant guarda el antiguo valor de xr para calcular los errores
         xr_ant = xr
 
+        # Mostrar resultados
         print(f"Pasada N {pasadas}")
         print(f"Xi: {xi}")
         print(f"Xu: {xu}")
 
-        # Calcular l valor de xr
+        # Calcular el valor de xr
         xr = (xi + xu) / 2
         print(f"Xr: {xr}")
 
-        # Calcular l valor de fxi, fxu, y fxr evaluados en la funcion
+        # Calcular el valor de fxi, fxu, y fxr evaluados en la funcion
         fxi = funcion.subs(x, xi)
         fxu = funcion.subs(x, xu)
         fxr = funcion.subs(x, xr)
 
+        # Mostrar resultados
         print(f"f(xi): {fxi}")
         print(f"f(xu): {fxu}")
         print(f"f(xr): {fxr}")
@@ -53,7 +55,7 @@ def biseccion(xi, xu, mi_funcion, max_pasadas, porcentaje_error):
 
         # Si el error porcentual es menor al error establecido, termina
         if (abs(error_porcentual) <= porcentaje_error):
-            print(f"Error de {porcentaje_error} alcanzado")
+            print(f"Error de {porcentaje_error}% alcanzado")
             print(f"Raiz aproximada: {xr}")
             return xr 
         
@@ -62,6 +64,7 @@ def biseccion(xi, xu, mi_funcion, max_pasadas, porcentaje_error):
     return xr
 
 def graficar(simbolo, mi_funcion, rango_x, rango_y, raiz):
+    # Metodo que sirve para graficar la funcion con la raiz encontrada.
     x = sp.Symbol(simbolo)
     funcion = mi_funcion
 
@@ -79,8 +82,10 @@ def graficar(simbolo, mi_funcion, rango_x, rango_y, raiz):
     plt.legend()
     plt.show()
 
-if __name__ == "__main__":
-    x = sp.Symbol('x')
-    funcion = x**2 
-    raiz = biseccion(-10, 10, funcion, 100, 0.5)
-    graficar('x', funcion, -10, 10, raiz)
+x = sp.Symbol('x')
+# La funcion del ejercicio se expresa como:
+funcion = 1 - (1225 / (9.81 * (4*x + (x**2/2.5))**3) ) * (4 + x)
+# Se saca la raiz
+raiz = biseccion(0.5, 2.5, funcion, 10, 1) 
+# Se grafica la raiz resultado con la funcion
+graficar('x', funcion, 0.5, 2.5, raiz)

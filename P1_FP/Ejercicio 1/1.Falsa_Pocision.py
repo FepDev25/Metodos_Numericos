@@ -2,11 +2,10 @@ import sympy as sp
 import numpy as np
 import matplotlib.pyplot as plt
 
-def biseccion(xi, xu, mi_funcion, max_pasadas, porcentaje_error):
-    # Definir variables y crear la funcion
-    xr = 0
+def falsa_pocision(xi, xu, simbolo, mi_funcion, max_pasadas, porcentaje_error):
     xr_ant = 0
-    x = sp.Symbol('x')
+    xr = 0
+    x = sp.Symbol(simbolo)
     funcion = mi_funcion
 
     pasadas = 1;
@@ -18,17 +17,19 @@ def biseccion(xi, xu, mi_funcion, max_pasadas, porcentaje_error):
         print(f"Xi: {xi}")
         print(f"Xu: {xu}")
 
-        # Calcular l valor de xr
-        xr = (xi + xu) / 2
-        print(f"Xr: {xr}")
-
-        # Calcular l valor de fxi, fxu, y fxr evaluados en la funcion
+        # Calcula f(xi) y f(xu) evaluados en la funcion
         fxi = funcion.subs(x, xi)
         fxu = funcion.subs(x, xu)
-        fxr = funcion.subs(x, xr)
-
+        
         print(f"f(xi): {fxi}")
         print(f"f(xu): {fxu}")
+
+        # Calcula el valor de xr
+        xr = xu - ( (fxu * (xi - xu)) / (fxi - fxu) )
+        print(f"Xr: {xr}")
+
+        # Calcula el valor de f(xr) evaluado en la funcion 
+        fxr = funcion.subs(x, xr)
         print(f"f(xr): {fxr}")
 
         # Calcular el valor de f(xi)*f(xr)
@@ -42,20 +43,20 @@ def biseccion(xi, xu, mi_funcion, max_pasadas, porcentaje_error):
         elif fxi_x_fxr > 0:
             xi = xr
         else:
-        # Si fxi_x_fxr es cero, xr es la raiz y termina
+        # Si fxi_x_fxr cero, xr es la raiz
             print(f"Raiz encontrada: {xr}")
             return xr
-
-        # Calcular el error aproximado y el error aproximado porcentual
+        
+        # Calculos los errores
         error_aprox = xr - xr_ant
         error_porcentual = (error_aprox / xr) * 100
         print(f"Error aproximado porcentual: {abs(error_porcentual)}%")
 
-        # Si el error porcentual es menor al error establecido, termina
+        # Si el error aproximado es igual o menor al error estalecido, termina
         if (abs(error_porcentual) <= porcentaje_error):
-            print(f"Error de {porcentaje_error} alcanzado")
+            print(f"Error de {porcentaje_error}% alcanzado")
             print(f"Raiz aproximada: {xr}")
-            return xr 
+            return xr
         
         pasadas += 1
         print()
@@ -79,8 +80,11 @@ def graficar(simbolo, mi_funcion, rango_x, rango_y, raiz):
     plt.legend()
     plt.show()
 
-if __name__ == "__main__":
-    x = sp.Symbol('x')
-    funcion = x**2 
-    raiz = biseccion(-10, 10, funcion, 100, 0.5)
-    graficar('x', funcion, -10, 10, raiz)
+# Se crea la funcion del ejercicio.
+x = sp.Symbol('x')
+funcion = 1 - (1225 / (9.81 * (4*x + (x**2/2.5))**3) ) * (4 + x)
+# En este metodo se recomienda disminuir el porcentaje de error y aumentar las iteraciones para un mejor resultado
+raiz = falsa_pocision(0.5 , 2.5, 'x', funcion, 10, 1)
+print(raiz)
+# Se grafican resultados.
+graficar('x', funcion, 0.5, 2.5, raiz)
